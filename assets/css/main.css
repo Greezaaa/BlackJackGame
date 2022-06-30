@@ -1,0 +1,83 @@
+html, body {
+    margin: 0;
+    color: #f2f2f2;
+    background-color: #000;
+}
+body {
+    width: 100%;
+    overflow-x: hidden;
+}
+.wrapper {
+    background-color: #2f4f30;
+    margin: auto;
+    width: 600px;
+    max-width: 90%;
+    padding: 2rem;
+    border-radius: 60px;
+    position: relative;
+    border: 4px solid orange;
+}
+.msg {
+
+    position: absolute;
+    width: 200px; 
+    background-color: red;
+    border: 5px;
+    top: 43%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.msg span {
+    display: block;
+    width: 100%;
+    text-align: center;
+    user-select: none;
+}
+.playerDesc {
+    min-height: 200px;
+    text-align: center;
+}
+header h2 {
+    text-align: center;
+    background-color: #000;
+    color: #f2f2f2;
+    padding: 1rem 0;
+    margin: 0 0 2rem;
+}
+.cartas {
+    margin: 2rem auto 5rem;
+    width: 500px;
+    max-height: 80%;
+
+   
+}
+.carta {
+    width: 75px;
+    position: relative;
+    left: 40px;
+    margin-left: -50px;
+    
+    transform-origin: bottom center;
+}
+
+.carta:nth-child(1) {
+    transform: rotate(-6deg) translateY(3px);
+}
+.carta:nth-child(2) {
+    transform: rotate(-2deg);
+}
+.carta:nth-child(3) {
+    transform: rotate(2deg);
+}
+.carta:nth-child(4) {
+    transform: rotate(6deg)translateY(3px);
+}
+.carta:nth-child(5) {
+    transform: rotate(10deg)translateY(9px);
+}
+.carta:nth-child(6) {
+    transform: rotate(14deg)translateY(16px);
+}
+.carta:nth-child(6) {
+    transform: rotate(18deg)translateY(21px);
+}
