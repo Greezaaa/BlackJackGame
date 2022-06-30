@@ -1,13 +1,3 @@
-/* 
-
-2C = 2 treboles
-2D = 2 diamantes
-2H = 2 corazones
-2S = 2 espadas
-
-
-*/
-
 // variables
 let dec = [];
 let playerPoints = 0;
@@ -148,3 +138,6 @@ btnNewGame.addEventListener('click', () => {
     btnDeal.disabled = false;
 })
 
+printMsg.addEventListener('click', () => {
+    printMsg.innerHTML = "";
+})

@@ -21,17 +21,21 @@ body {
 
     position: absolute;
     width: 200px; 
-    background-color: red;
+    background-color: rgba(255, 0, 0, 0.527);
     border: 5px;
     top: 43%;
     left: 50%;
     transform: translate(-50%,-50%);
+    border-radius: 10px;
+
+
 }
 .msg span {
     display: block;
     width: 100%;
     text-align: center;
     user-select: none;
+    padding: .5rem;
 }
 .playerDesc {
     min-height: 200px;
