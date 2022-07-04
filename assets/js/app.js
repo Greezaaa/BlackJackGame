@@ -1,4 +1,4 @@
-const miJuego = (() => {
+const BlackJack = (() => {
     `use strict`;
 
     let dec = [];
@@ -147,6 +147,6 @@ const miJuego = (() => {
         printMsg.innerHTML = "";
     })
     return {
-        newGame: startTheGame()
+        newGame: startTheGame
     };
 })();

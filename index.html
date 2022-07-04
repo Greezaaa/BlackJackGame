@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content=" " />
-    <meta name="keywords" content="  " />
+    <meta name="description" content="JavaScript Black Jack Game " />
+    <meta name="keywords" content=" Learning, JavaScript, ECMAScript6, blackjack, first project, keep learning  " />
     <meta name="author" content="Yevheniy Alekseyev" />
+    <meta name="author" content="greezaaa@gmail.com" />
     <meta name="robots" content="index" />
     <title> Black Jack </title>
-    <link rel="icon" href="images/favicon.png" />
+    <link rel="icon" href="assets/game_ss.png" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/main.css">
@@ -51,14 +52,16 @@
             <div class="row mt-2 gameBtns">
                 <div class="col text-center" id="btns">
                     <button id="btnNewGame" class="btn btn-primary">NEW GAME</button>
-                    <button id="btnAskCard" class="btn btn-warning">ASK CARD</button>
-                    <button id="btnDeal" class="btn btn-danger">DEAL</button>
+                    <button id="btnAskCard" disabled class="btn btn-warning">ASK CARD</button>
+                    <button id="btnDeal" disabled class="btn btn-danger">DEAL</button>
                 </div>
             </div>
         </div>
     </main>
     <footer>
-
+        <script>
+            BlackJack.startTheGame();
+        </script>
     </footer>
 </body>
 
