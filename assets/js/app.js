@@ -1,143 +1,152 @@
-// variables
-let dec = [];
-let playerPoints = 0;
-let compPoints = 0;
+const miJuego = (() => {
+    `use strict`;
 
-// constantes
-const types = ['C', 'D', 'H', 'S']
-const speciales = ['J', 'Q', 'K', 'A']
+    let dec = [];
+    const types = ['C', 'D', 'H', 'S'],
+        speciales = ['J', 'Q', 'K', 'A'];
 
+    let playersPoints = [];
+    // referencias html
+    const btnAskCard = document.querySelector('#btnAskCard'),
+        btnDeal = document.querySelector('#btnDeal'),
+        btnNewGame = document.querySelector('#btnNewGame');
 
-// referencias html
-const btnAskCard = document.querySelector('#btnAskCard');
-const btnDeal = document.querySelector('#btnDeal')
-const btnNewGame = document.querySelector('#btnNewGame')
+    const printMsg = document.querySelector('.msg'),
+        divPlayerCards = document.querySelectorAll('.cardConteiner'),
+        pointHtml = document.querySelectorAll('small');
 
-const printMsg = document.querySelector('.msg');
-const printCardPlayer = document.querySelector('#playerCards');
-const printCardComp = document.querySelector('#compCards');
-const pointHtml = document.querySelectorAll('small');
+    // iniciamos el juego
+    const startTheGame = (playerNumber = 2) => {
+        dec = newDec();
 
-// creamos una nueva baraja 
-const creatDeck = () => {
-    // añadimos cartas a la baraja de 2 a 10
-    for (let i = 2; i <= 10; i++) {
-        // por cada carta de 2 a 10 añadimos TYPE de carta, selecionando de TYPES
+        playersPoints = [];
+        for (let i = 0; i < playerNumber; i++) {
+            playersPoints.push(0);
+        }
+        printMsg.innerHTML = '';
+        pointHtml.forEach(elem => elem.innerText = 0);
+        divPlayerCards.forEach(elem => elem.innerHTML = '');
+
+        btnAskCard.disabled = false;
+        btnDeal.disabled = false;
+    }
+
+    // esta funciton crea la baraja
+    const newDec = () => {
+
+        dec = [];
+        for (let i = 2; i <= 10; i++) {
+            for (let type of types) {
+                dec.push(i + type)
+            }
+        }
         for (let type of types) {
-            // añadimos resultado al objeto DEC
-            dec.push(i + type)
+            for (let special of speciales) {
+                dec.push(special + type)
+            }
         }
+        return _.shuffle(dec);
     }
-    for (let type of types) {
-        for (let special of speciales) {
-            dec.push(special + type)
+
+    // function to ask the card
+    const askCart = () => {
+        if (dec.length === 0) {
+            throw 'No hay cartas en la baraja'
         }
+        return dec.pop();
     }
-    dec = _.shuffle(dec);
-    return dec;
-}
-// creamos baraja
-creatDeck();
-
-// function to ask the card
-const askCart = () => {
-    // si no quedan cartas paramas la app con THROW
-    if (dec.length === 0) {
-        throw 'No quedan cartas en la baraja'
+    // sacamos el valor de una carta
+    const cardValue = (card) => {
+        const valor = card.substring(0, card.length - 1) // cojemos valor del string desde posicion 0 hasta largo menos 1 caracter
+        return (isNaN(valor)) ?
+            ((valor === 'A') ? 11 : 10)
+            : valor * 1;
     }
-    const card = dec.pop();
-    return card;
-}
-// sacamos el valor de una carta
-const cardValue = (card) => {
 
-    const valor = card.substring(0, card.length - 1) // cojemos valor del string desde posicion 0 hasta largo menos 1 caracter
-    return (isNaN(valor)) ?
-        ((valor === 'A') ? 11 : 10)
-        : valor * 1;
-}
-const points = cardValue(askCart());
+    // turn: 0 = primer player, Last one is computer;
+    const getPoints = (card, turn) => {
+        playersPoints[turn] = playersPoints[turn] + cardValue(card);
+        pointHtml[turn].innerText = playersPoints[turn];
+        return playersPoints[turn];
+    }
 
-//comp turn AI time 
-const compTurn = (minPoints) => {
-
-    do {
-        const card = askCart();
-        compPoints = compPoints + cardValue(card);
-        pointHtml[1].innerText = `${compPoints}`;
+    const createCard = (card, turn) => {
 
         const imgCard = document.createElement('img');
         imgCard.src = `assets/cartas/${card}.png`;
         imgCard.classList.add('carta');
-        printCardComp.append(imgCard);
-
-        if (minPoints > 21) { break; }
-
-    } while ((compPoints < minPoints) && (minPoints <= 21));
-
-    setTimeout(() => {
-
-        if (compPoints === minPoints) {
-            printMsg.innerHTML = "<span>Impate!</span>"
-        } else if (minPoints > 21) {
-            printMsg.innerHTML = "<span>Comp Win!</span>"
-        } else if (compPoints > 21) {
-            printMsg.innerHTML = "<span>Player Win!</span>"
-        } else if (compPoints < playerPoints) {
-            printMsg.innerHTML = "<span>Player Win!</span>"
-        } else {
-            printMsg.innerHTML = "<span>Comp Win!</span>"
-        }
-    }, 100);
-}
-
-//eventos
-btnAskCard.addEventListener('click', () => {
-    const card = askCart();
-    playerPoints = playerPoints + cardValue(card);
-    pointHtml[0].innerHTML = `${playerPoints}`;
-
-    const imgCard = document.createElement('img');
-    imgCard.src = `assets/cartas/${card}.png`;
-    imgCard.classList.add('carta');
-    printCardPlayer.append(imgCard);
-
-    if (playerPoints > 21) {
-
-        btnAskCard.disabled = true;
-        btnDeal.disabled = true;
-
-        compTurn(playerPoints);
-    } else if (playerPoints === 21) {
-        btnAskCard.disabled = true;
-        btnDeal.disabled = true;
-        compTurn(playerPoints);
+        divPlayerCards[turn].append(imgCard)
     }
-});
+    // who win
+    const whoWin = () => {
 
-btnDeal.addEventListener('click', () => {
-    btnAskCard.disabled = true;
-    btnDeal.disabled = true;
-    compTurn(playerPoints);
-});
+        const [minPoints, compPoints] = playersPoints;
 
-btnNewGame.addEventListener('click', () => {
-    dec = [];
-    dec = creatDeck();
+        setTimeout(() => {
+            if (compPoints === minPoints) {
+                printMsg.innerHTML = "<span>DRAW</span>"
+            } else if (minPoints > 21) {
+                printMsg.innerHTML = "<span>Comp Win!</span>"
+            } else if (compPoints > 21) {
+                printMsg.innerHTML = "<span>Player Win!</span>"
+            } else {
+                printMsg.innerHTML = "<span>Comp Win!</span>"
+            }
+        }, 100);
+    }
 
-    playerPoints = 0;
-    compPoints = 0;
-    pointHtml[0].innerText = 0;
-    pointHtml[1].innerText = 0;
+    // comp turn 
+    const compGame = (minPoints) => {
 
-    printCardComp.innerHTML = "";
-    printCardPlayer.innerHTML = "";
-    printMsg.innerHTML = "";
+        let compPoints = 0;
 
-    btnAskCard.disabled = false;
-    btnDeal.disabled = false;
-})
+        do {
+            const card = askCart();
+            compPoints = getPoints(card, playersPoints.length - 1);
+            createCard(card, playersPoints.length - 1);
 
-printMsg.addEventListener('click', () => {
-    printMsg.innerHTML = "";
-})
+        } while ((compPoints < minPoints) && (minPoints <= 21));
+
+        whoWin();
+    }
+
+    //eventos
+    btnAskCard.addEventListener('click', () => {
+
+        const card = askCart();
+        const playerPoints = getPoints(card, 0);
+
+        createCard(card, 0);
+
+        if (playerPoints > 21) {
+
+            btnAskCard.disabled = true;
+            btnDeal.disabled = true;
+            compGame(playerPoints);
+
+        } else if (playerPoints === 21) {
+
+            btnAskCard.disabled = true;
+            btnDeal.disabled = true;
+            compGame(playerPoints);
+        }
+
+    });
+
+    btnDeal.addEventListener('click', () => {
+        btnAskCard.disabled = true;
+        btnDeal.disabled = true;
+        compGame(playersPoints[0]);
+    });
+
+    btnNewGame.addEventListener('click', () => {
+        startTheGame();
+    })
+
+    printMsg.addEventListener('click', () => {
+        printMsg.innerHTML = "";
+    })
+    return {
+        newGame: startTheGame()
+    };
+})();
